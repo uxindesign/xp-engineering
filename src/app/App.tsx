@@ -13,6 +13,7 @@ import { Slide07Model } from "./components/Slide07Model";
 import { Slide08DesignSystem } from "./components/Slide08DesignSystem";
 import { Slide09Stack } from "./components/Slide09Stack";
 import { Slide10TeamComposition } from "./components/Slide10TeamComposition";
+import { Slide11Roles } from "./components/Slide11Roles";
 import { ClosingSlide } from "./components/ClosingSlide";
 import { StandardPlanSlide, type StandardPlanSlideData } from "./components/StandardPlanSlide";
 
@@ -28,7 +29,6 @@ const LOGO_IDLE_Y_RANGE = 0.36;
 const LOGO_MOUSE_TILT_MULTIPLIER = 1.32;
 const LOGO_MOUSE_IDLE_DELAY_MS = 560;
 const STANDARD_PLAN_SLIDES: StandardPlanSlideData[] = [
-  { number: "11", eyebrow: "AAAA", title: "Papéis e responsabilidades", body: "AAA" },
   {
     number: "12",
     eyebrow: "CONEXÕES OPERACIONAIS",
@@ -271,7 +271,7 @@ export default function App() {
     if (isModalOpen) return;
     const target = event.target instanceof Element ? event.target : null;
     // Ignora cliques na modal mesmo após fechar no mouseUp (antes do click disparar).
-    if (target?.closest("[data-nng-modal]")) return;
+    if (target?.closest("[data-nng-modal], [data-roles-modal]")) return;
     if (target?.closest('button, a, input, select, textarea, [role="button"]')) return;
 
     const clickIsLeftHalf = event.clientX < window.innerWidth / 2;
@@ -564,13 +564,23 @@ export default function App() {
           />
         )}
 
-        {/* ─────────────── SLIDES 11–16 ─────────────── */}
-        {currentSlide >= 10 && currentSlide <= 15 && (
+        {/* ─────────────── SLIDE 11 ─────────────── */}
+        {currentSlide === 10 && (
+          <Slide11Roles
+            key="slide-11"
+            scaleX={scaleX}
+            scaleY={scaleY}
+            onModalChange={setIsModalOpen}
+          />
+        )}
+
+        {/* ─────────────── SLIDES 12–16 ─────────────── */}
+        {currentSlide >= 11 && currentSlide <= 15 && (
           <StandardPlanSlide
             key={`slide-${currentSlide + 1}`}
             scaleX={scaleX}
             scaleY={scaleY}
-            {...STANDARD_PLAN_SLIDES[currentSlide - 10]}
+            {...STANDARD_PLAN_SLIDES[currentSlide - 11]}
           />
         )}
 
