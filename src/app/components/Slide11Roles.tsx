@@ -4,10 +4,7 @@ import svgPaths from "../../imports/06EstruturaEProcessoIdeal/svg-qr6s1d1r3a";
 import { imgGroup } from "../../imports/06EstruturaEProcessoIdeal/svg-cceda";
 import { ROLES } from "./rolesData";
 import { RolesModal } from "./RolesModal";
-import {
-  INTERACTIVE_HOVER_BOX_SHADOW,
-  INTERACTIVE_HOVER_TRANSITION,
-} from "../constants/interactiveShadow";
+import { INTERACTIVE_HOVER_TRANSITION } from "../constants/interactiveShadow";
 
 interface Props {
   scaleX: number;
@@ -21,6 +18,7 @@ const INK = "#2f3237";
 const MUTED = "#6e7587";
 const SNOW = "#f5f5f5";
 const FOOTER_TEXT = "PLANO DE IMPLANTAÇÃO  -  EXPERIENCE ENGINEERING";
+const ROLE_ROW_HOVER_BOX_SHADOW = "0 8px 24px 0 rgba(5, 28, 117, 0.16)";
 const ease = "easeOut" as const;
 const fade = (delay: number) => ({ duration: 0.55, delay, ease });
 
@@ -124,7 +122,7 @@ function RoleRow({
         cursor: "pointer",
         textAlign: "left",
         boxSizing: "border-box",
-        boxShadow: active ? INTERACTIVE_HOVER_BOX_SHADOW : "none",
+        boxShadow: active ? ROLE_ROW_HOVER_BOX_SHADOW : "none",
         transition: `${INTERACTIVE_HOVER_TRANSITION}, padding 0.24s ease`,
       }}
     >
