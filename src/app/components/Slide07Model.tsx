@@ -13,6 +13,10 @@ import earlyQuestionMark from "../../assets/slide07/early-question-mark.svg";
 import earlyRenewA from "../../assets/slide07/early-renew-a.svg";
 import earlyRenewB from "../../assets/slide07/early-renew-b.svg";
 import growthRenew from "../../assets/slide07/growth-renew.svg";
+import {
+  INTERACTIVE_HOVER_BOX_SHADOW,
+  INTERACTIVE_HOVER_TRANSITION,
+} from "../constants/interactiveShadow";
 
 interface Slide07ModelProps {
   scaleX: number;
@@ -355,7 +359,8 @@ function NavArrowButton({
         outline: "none",
         background: hovered ? BLUE : "transparent",
         color: hovered ? "#fff" : BLUE,
-        transition: "background-color 150ms ease, color 150ms ease",
+        boxShadow: hovered ? INTERACTIVE_HOVER_BOX_SHADOW : "none",
+        transition: INTERACTIVE_HOVER_TRANSITION,
       }}
     >
       {children}
@@ -395,6 +400,8 @@ function NavDotButton({
         justifyContent: "center",
         outline: "none",
         overflow: "visible",
+        boxShadow: hovered ? INTERACTIVE_HOVER_BOX_SHADOW : "none",
+        transition: INTERACTIVE_HOVER_TRANSITION,
       }}
     >
       <NavDot active={active} hovered={hovered} />

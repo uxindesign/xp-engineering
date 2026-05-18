@@ -2,6 +2,10 @@ import { useRef, useState, type MouseEvent, type ReactNode, type WheelEvent } fr
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import svgPaths from "../../imports/06EstruturaEProcessoIdeal/svg-qr6s1d1r3a";
 import { imgGroup } from "../../imports/06EstruturaEProcessoIdeal/svg-cceda";
+import {
+  INTERACTIVE_HOVER_BOX_SHADOW,
+  INTERACTIVE_HOVER_TRANSITION,
+} from "../constants/interactiveShadow";
 
 interface Slide08DesignSystemProps {
   scaleX: number;
@@ -558,6 +562,8 @@ function NavDotButton({
         justifyContent: "center",
         outline: "none",
         overflow: "visible",
+        boxShadow: hovered ? INTERACTIVE_HOVER_BOX_SHADOW : "none",
+        transition: INTERACTIVE_HOVER_TRANSITION,
       }}
     >
       <NavDot active={active} hovered={hovered} />
@@ -611,7 +617,8 @@ function NavArrowButton({
         alignItems: "center",
         justifyContent: "center",
         outline: "none",
-        transition: "background-color 150ms ease, color 150ms ease",
+        boxShadow: hovered ? INTERACTIVE_HOVER_BOX_SHADOW : "none",
+        transition: INTERACTIVE_HOVER_TRANSITION,
       }}
     >
       {children}
