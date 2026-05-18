@@ -607,6 +607,7 @@ export default function App() {
           y: "-50%",
           pointerEvents: "none",
           zIndex: 9999,
+          boxShadow: "0 8px 24px 0 rgba(5, 28, 117, 0.16), 0 2px 4px 0 rgba(5, 28, 117, 0.24)",
         }}
         animate={{
           opacity: isInfographicActionCursor ? (cursorReady && cursorVisible ? 1 : 0) : (!isModalOpen && cursorReady && cursorVisible && !isInteractiveSuppressingCursor ? 1 : 0),
