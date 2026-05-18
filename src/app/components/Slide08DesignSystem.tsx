@@ -514,7 +514,21 @@ function NavDot({ active, hovered }: { active: boolean; hovered: boolean }) {
   const highlighted = active || hovered;
 
   return (
-    <motion.svg width={24} height={24} viewBox="0 0 24 24" fill="none" style={{ display: "block", overflow: "visible", flexShrink: 0 }}>
+    <motion.svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      style={{
+        display: "block",
+        overflow: "visible",
+        flexShrink: 0,
+        filter: hovered
+          ? "drop-shadow(0 2px 4px rgba(5, 28, 117, 0.24)) drop-shadow(0 8px 24px rgba(5, 28, 117, 0.16))"
+          : "none",
+        transition: "filter 0.24s ease",
+      }}
+    >
       <motion.circle
         cx="12"
         cy="12"
@@ -556,13 +570,12 @@ function NavDotButton({
         border: 0,
         padding: 0,
         cursor: "pointer",
-        background: "transparent",
+        background: hovered ? BLUE : "transparent",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         outline: "none",
         overflow: "visible",
-        boxShadow: hovered ? INTERACTIVE_HOVER_BOX_SHADOW : "none",
         transition: INTERACTIVE_HOVER_TRANSITION,
       }}
     >
