@@ -176,12 +176,10 @@ function AreaCard({ area, metrics }: { area: InteractionAreaCard; metrics: Metri
 
 function HorizontalNavButton({
   direction,
-  disabled,
   onClick,
   metrics,
 }: {
   direction: "left" | "right";
-  disabled: boolean;
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
   metrics: Metrics;
 }) {
@@ -192,7 +190,6 @@ function HorizontalNavButton({
     <button
       type="button"
       aria-label={direction === "left" ? "Painel anterior" : "Próximo painel"}
-      disabled={disabled}
       onClick={onClick}
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
@@ -203,26 +200,29 @@ function HorizontalNavButton({
         border: 0,
         padding: 0,
         borderRadius: "50%",
-        background: hovered && !disabled ? BLUE : "transparent",
-        cursor: disabled ? "default" : "pointer",
-        opacity: disabled ? 0.35 : 1,
+        background: hovered ? BLUE : "transparent",
+        cursor: "pointer",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         outline: "none",
-        boxShadow: hovered && !disabled ? INTERACTIVE_HOVER_BOX_SHADOW : "none",
+        boxShadow: hovered ? INTERACTIVE_HOVER_BOX_SHADOW : "none",
         transition: INTERACTIVE_HOVER_TRANSITION,
       }}
     >
       <svg width={vs(24)} height={vs(24)} viewBox="0 0 24 24" fill="none" aria-hidden>
         <path
           d={direction === "left" ? navSvgPaths.p90d8b80 : navSvgPaths.p23cbb200}
-          fill={hovered && !disabled ? "#fff" : BLUE}
+          fill={hovered ? "#fff" : BLUE}
           style={{ transition: "fill 0.24s ease" }}
         />
       </svg>
     </button>
   );
+}
+
+function cyclePanel(current: number, delta: number) {
+  return (current + delta + INTERACTION_MAP_PANEL_COUNT) % INTERACTION_MAP_PANEL_COUNT;
 }
 
 export function Slide12InteractionMap({ metrics, onDragAreaHover }: Props) {
@@ -234,12 +234,12 @@ export function Slide12InteractionMap({ metrics, onDragAreaHover }: Props) {
 
   const goPrev = (event: MouseEvent) => {
     event.stopPropagation();
-    setPanel((current) => Math.max(0, current - 1));
+    setPanel((current) => cyclePanel(current, -1));
   };
 
   const goNext = (event: MouseEvent) => {
     event.stopPropagation();
-    setPanel((current) => Math.min(INTERACTION_MAP_PANEL_COUNT - 1, current + 1));
+    setPanel((current) => cyclePanel(current, 1));
   };
 
   return (
@@ -349,8 +349,8 @@ export function Slide12InteractionMap({ metrics, onDragAreaHover }: Props) {
               if (dragStartXRef.current === null) return;
               const delta = event.clientX - dragStartXRef.current;
               const threshold = 60;
-              if (delta < -threshold) setPanel((current) => Math.min(current + 1, INTERACTION_MAP_PANEL_COUNT - 1));
-              else if (delta > threshold) setPanel((current) => Math.max(current - 1, 0));
+              if (delta < -threshold) setPanel((current) => cyclePanel(current, 1));
+              else if (delta > threshold) setPanel((current) => cyclePanel(current, -1));
               dragStartXRef.current = null;
               try {
                 (event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId);
@@ -394,13 +394,8 @@ export function Slide12InteractionMap({ metrics, onDragAreaHover }: Props) {
         </motion.div>
 
         <motion.div style={{ display: "flex", gap: vx(32), alignItems: "center" }}>
-          <HorizontalNavButton direction="left" disabled={panel === 0} onClick={goPrev} metrics={metrics} />
-          <HorizontalNavButton
-            direction="right"
-            disabled={panel === INTERACTION_MAP_PANEL_COUNT - 1}
-            onClick={goNext}
-            metrics={metrics}
-          />
+          <HorizontalNavButton direction="left" onClick={goPrev} metrics={metrics} />
+          <HorizontalNavButton direction="right" onClick={goNext} metrics={metrics} />
         </motion.div>
       </motion.div>
     </motion.div>
