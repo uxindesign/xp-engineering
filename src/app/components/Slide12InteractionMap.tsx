@@ -351,8 +351,11 @@ export function Slide12InteractionMap({ metrics, onDragAreaHover }: Props) {
               if (dragStartXRef.current === null) return;
               const delta = event.clientX - dragStartXRef.current;
               const threshold = 60;
-              if (delta < -threshold) setPanel((current) => cyclePanel(current, 1));
-              else if (delta > threshold) setPanel((current) => cyclePanel(current, -1));
+              if (delta < -threshold) {
+                setPanel((current) => Math.min(current + 1, INTERACTION_MAP_PANEL_COUNT - 1));
+              } else if (delta > threshold) {
+                setPanel((current) => Math.max(current - 1, 0));
+              }
               dragStartXRef.current = null;
               try {
                 (event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId);
