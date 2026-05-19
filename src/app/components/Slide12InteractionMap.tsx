@@ -106,6 +106,19 @@ function ExchangeBox({
   );
 }
 
+function AreaCardTitle({ title }: { title: string }) {
+  const slashIndex = title.indexOf("/");
+  if (slashIndex === -1) return title;
+
+  return (
+    <>
+      {title.slice(0, slashIndex + 1)}
+      <br />
+      {title.slice(slashIndex + 1)}
+    </>
+  );
+}
+
 function AreaCard({ area, metrics }: { area: InteractionAreaCard; metrics: Metrics }) {
   const { vx, vy, vs } = metrics;
 
@@ -131,13 +144,16 @@ function AreaCard({ area, metrics }: { area: InteractionAreaCard; metrics: Metri
         <p
           style={{
             margin: 0,
+            width: "100%",
             fontFamily: "'Bronkoh-Heavy', sans-serif",
             fontSize: vs(28),
             lineHeight: 1.2,
             color: NAVY,
+            overflowWrap: "break-word",
+            wordBreak: "break-word",
           }}
         >
-          {area.title}
+          <AreaCardTitle title={area.title} />
         </p>
         <motion.div style={{ display: "flex", flexDirection: "column", gap: vy(12) }}>
           <p
