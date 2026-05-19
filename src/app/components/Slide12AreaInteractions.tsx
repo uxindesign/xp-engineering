@@ -384,6 +384,101 @@ function isCardVisible(cardIndex: number, page: number) {
   return cardIndex >= 2;
 }
 
+function Slide12Header({
+  header,
+  metrics,
+  reducedMotion,
+  descriptionEnterDelay,
+}: {
+  header: (typeof PAGE_HEADERS)[number];
+  metrics: Metrics;
+  reducedMotion: boolean;
+  descriptionEnterDelay: number;
+}) {
+  const { vx, vy, vs } = metrics;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: vy(-24) }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={fade(0.08)}
+      style={{
+        position: "absolute",
+        left: vx(120),
+        top: vy(96),
+        width: vx(1680),
+        display: "flex",
+        flexDirection: "column",
+        gap: vy(24),
+      }}
+    >
+      <motion.div style={{ display: "flex", flexDirection: "column", gap: vy(16), width: "100%" }}>
+        <p
+          style={{
+            margin: 0,
+            fontFamily: "'Bronkoh-SemiBold', sans-serif",
+            fontSize: vs(16),
+            letterSpacing: vs(2),
+            lineHeight: "normal",
+            color: BLUE,
+            textTransform: "uppercase",
+          }}
+        >
+          CONEXÕES OPERACIONAIS
+        </p>
+        <AnimatePresence initial={false} mode="wait">
+          <motion.p
+            key={header.title}
+            initial={{ opacity: 0, y: reducedMotion ? 0 : vy(8) }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: reducedMotion ? 0 : vy(-8) }}
+            transition={{ duration: reducedMotion ? 0 : 0.28, ease: EASE }}
+            style={{
+              margin: 0,
+              fontFamily: "'Bronkoh-Heavy', sans-serif",
+              fontSize: vs(80),
+              letterSpacing: vs(-1.5),
+              lineHeight: 1,
+              color: NAVY,
+            }}
+          >
+            {header.title}
+          </motion.p>
+        </AnimatePresence>
+      </motion.div>
+      <AnimatePresence initial={false} mode="wait">
+        <motion.p
+          key={header.body}
+          initial={{ opacity: 0, y: reducedMotion ? 0 : vy(-6) }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: reducedMotion ? 0 : 0.34,
+              delay: reducedMotion ? 0 : descriptionEnterDelay,
+              ease: EASE,
+            },
+          }}
+          exit={{
+            opacity: 0,
+            y: reducedMotion ? 0 : vy(-8),
+            transition: { duration: reducedMotion ? 0 : 0.18, ease: EASE },
+          }}
+          style={{
+            margin: 0,
+            fontFamily: "'Bronkoh-Regular', sans-serif",
+            fontSize: vs(28),
+            lineHeight: 1.5,
+            color: INK,
+          }}
+        >
+          {header.body}
+        </motion.p>
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
 function InteractionGrid({ page, metrics }: { page: number; metrics: Metrics }) {
   const { vx, vy } = metrics;
 
@@ -448,6 +543,8 @@ export function Slide12AreaInteractions({ scaleX, scaleY, onDragAreaHover }: Pro
   };
 
   const header = PAGE_HEADERS[page];
+  const descriptionEnterDelay =
+    page === 1 && pageDirection > 0 ? PAGE_TRANSITION_SECONDS : page === 0 && pageDirection < 0 ? PAGE_TRANSITION_SECONDS : 0;
 
   return (
     <motion.div
@@ -461,59 +558,12 @@ export function Slide12AreaInteractions({ scaleX, scaleY, onDragAreaHover }: Pro
     >
       <VerticalNav page={page} setPage={setPage} metrics={metrics} />
 
-      <motion.div
-        initial={{ opacity: 0, y: vy(-24) }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={fade(0.08)}
-        style={{
-          position: "absolute",
-          left: vx(120),
-          top: vy(96),
-          width: vx(1680),
-          display: "flex",
-          flexDirection: "column",
-          gap: vy(24),
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: vy(16), width: "100%" }}>
-          <p
-            style={{
-              margin: 0,
-              fontFamily: "'Bronkoh-SemiBold', sans-serif",
-              fontSize: vs(16),
-              letterSpacing: vs(2),
-              lineHeight: "normal",
-              color: BLUE,
-              textTransform: "uppercase",
-            }}
-          >
-            CONEXÕES OPERACIONAIS
-          </p>
-          <p
-            style={{
-              margin: 0,
-              fontFamily: "'Bronkoh-Heavy', sans-serif",
-              fontSize: vs(80),
-              letterSpacing: vs(-1.5),
-              lineHeight: 1,
-              color: NAVY,
-            }}
-          >
-            {header.title}
-          </p>
-        </div>
-        <p
-          style={{
-            margin: 0,
-            fontFamily: "'Bronkoh-Regular', sans-serif",
-            fontSize: vs(28),
-            lineHeight: 1.5,
-            color: INK,
-          }}
-        >
-          {header.body}
-        </p>
-      </motion.div>
+      <Slide12Header
+        header={header}
+        metrics={metrics}
+        reducedMotion={!!reducedMotion}
+        descriptionEnterDelay={reducedMotion ? 0 : descriptionEnterDelay}
+      />
 
       <AnimatePresence mode="wait" custom={pageDirection}>
         {page === 1 ? (
